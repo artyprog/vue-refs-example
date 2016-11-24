@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <style>
+            body {
+                background: #f7f7f7;
+            }
+
+            .modal {
+                background-color: #fff;
+                border: 1px solid #efefef;
+                position: relative;
+            }
+            .modal__body {
+                padding: 26px;
+            }
+            .modal__actions {
+                padding: 13px 26px;
+                border-top: 1px solid #efefef;
+            }
+
+            .modal__close {
+                position: absolute;
+                top: 13px;
+                right: 13px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <button @click="toggleModal('new-item')">New item</button>
+            <button @click="toggleModal('confirm')">Delete item</button>
+
+            <modal ref="new-item">
+                Add new item
+                <div slot="actions">
+                    <button>Save item</button>
+                    <button>Cancel</button>
+                </div>
+            </modal>
+            <modal ref="confirm">
+                Delete item?
+                <div slot="actions">
+                    <button>Yes, delete!</button>
+                    <button>Cancel</button>
+                </div>
+            </modal>
+
+            <script type="x-template" id="modal-template">
+                <div class="modal" v-show="visible">
+                    <button class="modal__close" @click="close">X</button>
+                    <div class="modal__body">
+                        <h1>Modal</h1>
+                        <slot>
+                            This is a modal. Want to add some content?
+                        </slot>
+                    </div>
+                    <div class="modal__actions">
+                        <slot name="actions">
+                            <button @click="close">Close</button>
+                        </slot>
+                    </div>
+                </div>
+            </script>
+        </div>
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
+        <script>
+            var Modal = Vue.component('modal', {
+                template: "#modal-template",
+                data: function() {
+                    return {
+                        visible: false
+                    }
+                },
+                methods: {
+                    close: function() {
+                        this.visible = false;
+                    }
+                }
+            });
+
+            var app = new Vue({
+                el: "#app",
+                methods: {
+                    toggleModal(modal) {
+                        this.$refs[modal].visible = !this.$refs[modal].visible;
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
